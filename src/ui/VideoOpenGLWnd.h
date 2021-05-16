@@ -2,18 +2,18 @@
 #define GL_WND_H
 
 #include "HVideoWnd.h"
-#include "HGLWidget.h"
+#include "MOpenGLWidget.h"
 
-class GLWnd : public HVideoWnd, HGLWidget {
+class VideoOpenGLWnd : public HVideoWnd, MOpenGLWidget {
 public:
-    GLWnd(QWidget* parent = nullptr);
+    VideoOpenGLWnd(QWidget* parent = nullptr);
 
     virtual void setGeometry(const QRect& rc) {
-        HGLWidget::setGeometry(rc);
+        MOpenGLWidget::setGeometry(rc);
     }
 
     virtual void update() {
-        HGLWidget::update();
+        MOpenGLWidget::update();
     }
 
 protected:

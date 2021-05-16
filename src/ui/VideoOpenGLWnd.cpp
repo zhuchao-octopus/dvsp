@@ -1,11 +1,11 @@
-#include "GLWnd.h"
+#include "VideoOpenGLWnd.h"
 
-GLWnd::GLWnd(QWidget* parent) : HVideoWnd(parent), HGLWidget(parent)
+VideoOpenGLWnd::VideoOpenGLWnd(QWidget* parent) : HVideoWnd(parent), MOpenGLWidget(parent)
 {
 
 }
 
-void GLWnd::drawTime() {
+void VideoOpenGLWnd::drawTime() {
     char szTime[12];
     duration_fmt(last_frame.ts / 1000, szTime);
     // Left Top
@@ -13,7 +13,7 @@ void GLWnd::drawTime() {
     drawText(pt, szTime, 14, Qt::white);
 }
 
-void GLWnd::drawFPS() {
+void VideoOpenGLWnd::drawFPS() {
     char szFPS[16];
     sprintf(szFPS, "FPS:%d", fps);
     // Right Top
@@ -21,7 +21,7 @@ void GLWnd::drawFPS() {
     drawText(pt, szFPS, 14, Qt::blue);
 }
 
-void GLWnd::drawResolution() {
+void VideoOpenGLWnd::drawResolution() {
     char szResolution[16];
     sprintf(szResolution, "%d X %d", last_frame.w, last_frame.h);
     // Left Bottom
@@ -29,9 +29,9 @@ void GLWnd::drawResolution() {
     drawText(pt, szResolution, 14, Qt::blue);
 }
 
-void GLWnd::paintGL() {
+void VideoOpenGLWnd::paintGL() {
     calcFPS();
-    HGLWidget::paintGL();
+    MOpenGLWidget::paintGL();
 
     if (last_frame.isNull()) {
         /*

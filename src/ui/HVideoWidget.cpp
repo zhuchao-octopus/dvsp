@@ -47,7 +47,7 @@ static renderer_type_e renderer_type_enum(const char* str) {
     */
     return DEFAULT_RENDERER_TYPE;
 }
-
+//视频控件类 包含成员OPENGL WIDGET
 HVideoWidget::HVideoWidget(QWidget *parent) : QFrame(parent)
 {
     playerid = 0;
@@ -146,7 +146,7 @@ HVideoWidget::~HVideoWidget() {
 void HVideoWidget::initUI() {
     setFocusPolicy(Qt::ClickFocus);
 
-    videownd = HVideoWndFactory::create(renderer_type, this);
+    videownd = HVideoWndFactory::create(renderer_type, this);//音视频显示控件
     titlebar = new HVideoTitlebar(this);
     toolbar  = new HVideoToolbar(this);
     btnMedia = genPushButton(QPixmap(":/image/media_bk.png"), tr("Open media"));
@@ -163,7 +163,8 @@ void HVideoWidget::initUI() {
     toolbar->hide();
 }
 
-void HVideoWidget::initConnect() {
+void HVideoWidget::initConnect()
+{
     connect( btnMedia, &QPushButton::clicked, [this] {
         HOpenMediaDlg dlg(this);
         if (dlg.exec() == QDialog::Accepted) {
@@ -268,7 +269,7 @@ void HVideoWidget::close() {
 
 void HVideoWidget::start() {
     if (media.type == MEDIA_TYPE_NONE) {
-        QMessageBox::information(this, tr("Info"), tr("Please first set media source, then start."));
+        ///QMessageBox::information(this, tr("Info"), tr("Please first set media source, then start."));
         updateUI();
         return;
     }
@@ -509,5 +510,7 @@ void HVideoWidget::setAspectRatio(aspect_ratio_t ar) {
 
     int x = border + (scr_w - dst_w) / 2;
     int y = border + (scr_h - dst_h) / 2;
-    videownd->setGeometry(QRect(x, y, dst_w, dst_h));
+    //设置播放区域大小
+   videownd->setGeometry(QRect(x, y, dst_w, dst_h));
+   //videownd->setGeometry(QRect(x, y, 10, 100));
 }

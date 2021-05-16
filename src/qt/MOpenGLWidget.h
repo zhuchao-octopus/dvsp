@@ -9,10 +9,10 @@
 
 void bindTexture(GLTexture* tex, QImage* img);
 
-class HGLWidget : public QOpenGLWidget
+class MOpenGLWidget : public QOpenGLWidget
 {
 public:
-    HGLWidget(QWidget* parent = NULL);
+    MOpenGLWidget(QWidget* parent = NULL);
 
     // ratio = 0 means spread
     void setAspectRatio(double ratio);

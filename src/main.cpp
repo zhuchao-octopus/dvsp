@@ -108,20 +108,20 @@ static int load_confile() {
 
 int main(int argc, char *argv[]) {
     load_confile();
-
+    string str;
     qInstallMessageHandler(qLogHandler);
     qInfo("-------------------app start----------------------------------");
     QApplication app(argc, argv);
     app.setApplicationName(APP_NAME);
 
-    string str = g_confile->GetValue("skin", "ui");
-    loadSkin(str.empty() ? DEFAULT_SKIN : str.c_str());
+//    string str = g_confile->GetValue("skin", "ui");
+//    loadSkin(str.empty() ? DEFAULT_SKIN : str.c_str());
 
-    str = g_confile->GetValue("palette", "ui");
-    setPalette(str.empty() ? DEFAULT_PALETTE_COLOR : strtoul(str.c_str(), NULL, 16));
+//    str = g_confile->GetValue("palette", "ui");
+//    setPalette(str.empty() ? DEFAULT_PALETTE_COLOR : strtoul(str.c_str(), NULL, 16));
 
-    str = g_confile->GetValue("language", "ui");
-    loadLang(str.empty() ? DEFAULT_LANGUAGE : str.c_str());
+//    str = g_confile->GetValue("language", "ui");
+//    loadLang(str.empty() ? DEFAULT_LANGUAGE : str.c_str());
 
     setFont(g_confile->Get<int>("fontsize", "ui", DEFAULT_FONT_SIZE));
 
@@ -161,10 +161,10 @@ int main(int argc, char *argv[]) {
 
     g_confile->Set<int>("main_window_state", (int)g_mainwnd->window_state, "ui");
     str = asprintf("rect(%d,%d,%d,%d)",
-                    g_mainwnd->x(),
-                    g_mainwnd->y(),
-                    g_mainwnd->width(),
-                    g_mainwnd->height());
+                   g_mainwnd->x(),
+                   g_mainwnd->y(),
+                   g_mainwnd->width(),
+                   g_mainwnd->height());
     g_confile->SetValue("main_window_rect", str, "ui");
 
     MainWindow::exitInstance();

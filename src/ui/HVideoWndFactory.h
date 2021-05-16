@@ -2,7 +2,7 @@
 #define H_VIDEO_WND_FACTORY_H
 
 #include "HVideoWnd.h"
-#include "GLWnd.h"
+#include "VideoOpenGLWnd.h"
 #include "SDL2Wnd.h"
 
 enum renderer_type_e {
@@ -17,10 +17,11 @@ enum renderer_type_e {
 
 class HVideoWndFactory {
 public:
-    static HVideoWnd* create(renderer_type_e type = DEFAULT_RENDERER_TYPE, QWidget* parent = NULL) {
+    static HVideoWnd* create(renderer_type_e type = DEFAULT_RENDERER_TYPE, QWidget* parent = NULL)
+    {
         switch(type) {
         case RENDERER_TYPE_OPENGL:
-            return new GLWnd(parent);
+            return new VideoOpenGLWnd(parent);
         case RENDERER_TYPE_SDL2:
             return new SDL2Wnd(parent);
         default:

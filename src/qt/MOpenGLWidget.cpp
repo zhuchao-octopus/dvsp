@@ -1,4 +1,4 @@
-#include "HGLWidget.h"
+#include "MOpenGLWidget.h"
 #include "avdef.h"
 
 static int glPixFmt(int type) {
@@ -30,13 +30,13 @@ void bindTexture(GLTexture* tex, QImage* img) {
     glTexImage2D(GL_TEXTURE_2D, 0, tex->frame.bpp/8, tex->frame.w, tex->frame.h, 0, tex->frame.type, GL_UNSIGNED_BYTE, img->bits());
 }
 
-std::atomic_flag HGLWidget::s_glew_init = ATOMIC_FLAG_INIT;
-GLuint HGLWidget::prog_yuv;
-GLuint HGLWidget::texUniformY;
-GLuint HGLWidget::texUniformU;
-GLuint HGLWidget::texUniformV;
+std::atomic_flag MOpenGLWidget::s_glew_init = ATOMIC_FLAG_INIT;
+GLuint MOpenGLWidget::prog_yuv;
+GLuint MOpenGLWidget::texUniformY;
+GLuint MOpenGLWidget::texUniformU;
+GLuint MOpenGLWidget::texUniformV;
 
-HGLWidget::HGLWidget(QWidget* parent)
+MOpenGLWidget::MOpenGLWidget(QWidget* parent)
     : QOpenGLWidget(parent)
 {
     aspect_ratio = 0.0;
@@ -61,7 +61,7 @@ HGLWidget::HGLWidget(QWidget* parent)
     memcpy(textures, tmp, sizeof(GLfloat)*8);
 }
 
-void HGLWidget::setAspectRatio(double ratio) {
+void MOpenGLWidget::setAspectRatio(double ratio) {
     aspect_ratio = ratio;
     if (FLOAT_EQUAL_ZERO(aspect_ratio)) {
         setVertices(1.0);
@@ -71,7 +71,7 @@ void HGLWidget::setAspectRatio(double ratio) {
     }
 }
 
-void HGLWidget::setVertices(double ratio) {
+void MOpenGLWidget::setVertices(double ratio) {
     GLfloat w = 1.0, h = 1.0;
     if (ratio < 1.0) {
         w = ratio;
@@ -90,7 +90,7 @@ void HGLWidget::setVertices(double ratio) {
     memcpy(vertices, tmp, sizeof(GLfloat)*8);
 }
 
-void HGLWidget::setVertices(QRect rc) {
+void MOpenGLWidget::setVertices(QRect rc) {
     int wnd_w = width();
     int wnd_h = height();
     if (wnd_w <= 0 || wnd_h <= 0) {
@@ -112,7 +112,7 @@ void HGLWidget::setVertices(QRect rc) {
     memcpy(vertices, tmp, sizeof(GLfloat)*8);
 }
 
-void HGLWidget::loadYUVShader() {
+void MOpenGLWidget::loadYUVShader() {
     GLuint vs = glCreateShader(GL_VERTEX_SHADER);
     GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
 
@@ -187,7 +187,7 @@ void HGLWidget::loadYUVShader() {
     qDebug("loadYUVShader ok");
 }
 
-void HGLWidget::initVAO() {
+void MOpenGLWidget::initVAO() {
     glVertexAttribPointer(VER_ATTR_VER, 2, GL_FLOAT, GL_FALSE, 0, vertices);
     glEnableVertexAttribArray(VER_ATTR_VER);
 
@@ -195,7 +195,7 @@ void HGLWidget::initVAO() {
     glEnableVertexAttribArray(VER_ATTR_TEX);
 }
 
-void HGLWidget::initYUV() {
+void MOpenGLWidget::initYUV() {
     glGenTextures(3, tex_yuv);
     for (int i = 0; i < 3; ++i) {
         glBindTexture(GL_TEXTURE_2D, tex_yuv[i]);
@@ -206,7 +206,7 @@ void HGLWidget::initYUV() {
     }
 }
 
-void HGLWidget::initializeGL() {
+void MOpenGLWidget::initializeGL() {
     if (!s_glew_init.test_and_set()) {
         if (glewInit() != 0) {
             s_glew_init.clear();
@@ -220,17 +220,17 @@ void HGLWidget::initializeGL() {
     initYUV();
 }
 
-void HGLWidget::resizeGL(int w, int h) {
+void MOpenGLWidget::resizeGL(int w, int h) {
     glViewport(0,0,w,h);
     setAspectRatio(aspect_ratio);
 }
 
-void HGLWidget::paintGL() {
+void MOpenGLWidget::paintGL() {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void HGLWidget::drawYUV(HFrame* pFrame) {
+void MOpenGLWidget::drawYUV(HFrame* pFrame) {
     assert(pFrame->type == PIX_FMT_IYUV || pFrame->type == PIX_FMT_YV12);
 
     int w = pFrame->w;
@@ -267,7 +267,7 @@ void HGLWidget::drawYUV(HFrame* pFrame) {
     glUseProgram(0);
 }
 
-void HGLWidget::drawFrame(HFrame *pFrame) {
+void MOpenGLWidget::drawFrame(HFrame *pFrame) {
     if (pFrame->type == PIX_FMT_IYUV || pFrame->type == PIX_FMT_YV12) {
         drawYUV(pFrame);
     }
@@ -280,7 +280,7 @@ void HGLWidget::drawFrame(HFrame *pFrame) {
     }
 }
 
-void HGLWidget::drawTexture(HRect rc, GLTexture *tex) {
+void MOpenGLWidget::drawTexture(HRect rc, GLTexture *tex) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0.0, width(), height(), 0.0, -1.0, 1.0);
@@ -303,7 +303,7 @@ void HGLWidget::drawTexture(HRect rc, GLTexture *tex) {
     glDisable(GL_BLEND);
 }
 
-void HGLWidget::drawRect(HRect rc, HColor clr, int line_width, bool bFill) {
+void MOpenGLWidget::drawRect(HRect rc, HColor clr, int line_width, bool bFill) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(0.0, width(), height(), 0.0, -1.0, 1.0);
@@ -329,7 +329,7 @@ void HGLWidget::drawRect(HRect rc, HColor clr, int line_width, bool bFill) {
 }
 
 #include <QPainter>
-void HGLWidget::drawText(QPoint lb, const char* text, int fontsize, QColor clr) {
+void MOpenGLWidget::drawText(QPoint lb, const char* text, int fontsize, QColor clr) {
     QPainter painter(this);
     QFont font = painter.font();
     font.setPointSize(fontsize);

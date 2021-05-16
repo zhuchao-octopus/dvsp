@@ -8,7 +8,7 @@
 #CONFIG -= debug
 #CONFIG -= release
 #CONFIG -= debug_and_release
-CONFIG += sdk_no_version_check
+#CONFIG += sdk_no_version_check
 
 DEFINES -= UNICODE _UNICODE
 
@@ -91,18 +91,19 @@ SOURCES += \
 # qt
 INCLUDEPATH += src/qt
 HEADERS += \
+    src/qt/MOpenGLWidget.h \
     src/qt/qtheaders.h \
     src/qt/qtfunctions.h \
     src/qt/qtrcloader.h \
-    src/qt/HGLWidget.h \
 
 SOURCES += \
+    src/qt/MOpenGLWidget.cpp \
     src/qt/qtrcloader.cpp \
-    src/qt/HGLWidget.cpp \
 
 # ui
 INCLUDEPATH += src/ui
 HEADERS +=  \
+    src/ui/VideoOpenGLWnd.h \
     src/ui/qtstyles.h   \
     src/ui/CustomEventType.h \
     src/ui/htable.h \
@@ -116,11 +117,11 @@ HEADERS +=  \
     src/ui/HOpenMediaDlg.h \
     src/ui/HMediaInfoDlg.h \
     src/ui/HVideoWndFactory.h \
-    src/ui/GLWnd.h \
     src/ui/LsideWidget.h \
     src/ui/RsideWidget.h \
 
 SOURCES +=  \
+    src/ui/VideoOpenGLWnd.cpp \
     src/ui/htable.cpp \
     src/ui/MainWindow.cpp \
     src/ui/CentralWidget.cpp \
@@ -131,7 +132,6 @@ SOURCES +=  \
     src/ui/HVideoWnd.cpp \
     src/ui/HOpenMediaDlg.cpp \
     src/ui/HMediaInfoDlg.cpp \
-    src/ui/GLWnd.cpp \
     src/ui/LsideWidget.cpp \
     src/ui/RsideWidget.cpp \
 
@@ -212,35 +212,24 @@ win32 {
             -lws2_32      \
             -lsecur32     \
 
-    win32-msvc {
-        if (contains(DEFINES, WIN64)) {
-            DESTDIR = $$_PRO_FILE_PWD_/bin/msvc2015_x64
-            LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/msvc2015_x64
-        } else {
-            DESTDIR = $$_PRO_FILE_PWD_/bin/msvc2015_x86
-            LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/msvc2015_x86
-        }
-    }
-
-    win32-g++ {
         QMAKE_CFLAGS += -std=c99
         QMAKE_CXXFLAGS += -std=c++11
         if (contains(DEFINES, WIN64)) {
-            DESTDIR = $$_PRO_FILE_PWD_/bin/mingw64
-            LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/mingw64
+            #DESTDIR = $$_PRO_FILE_PWD_/bin
+            LIBS += -L$$_PRO_FILE_PWD_/3rd/lib
         } else {
-            DESTDIR = $$_PRO_FILE_PWD_/bin/mingw32
-            LIBS += -L$$_PRO_FILE_PWD_/3rd/lib/mingw32
+            #DESTDIR = $$_PRO_FILE_PWD_/bin
+            LIBS += -L$$_PRO_FILE_PWD_/3rd/lib
         }
 
-        # for ffmpeg staticlib
-        LIBS += -liconv \
-        -lz     \
-        -lbz2   \
-        -llzma  \
-        -lcrypto \
-        -lbcrypt
-    }
+#        # for ffmpeg staticlib
+#        LIBS += -liconv \
+#        -lz     \
+#        -lbz2   \
+#        -llzma  \
+#        -lcrypto \
+#        -lbcrypt
+
 }
 
 unix {

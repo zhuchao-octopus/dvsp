@@ -9,7 +9,7 @@
 #include "HVideoToolbar.h"
 #include "HVideoPlayerFactory.h"
 
-class HVideoWidget : public QFrame
+class HVideoWidget : public QFrame//视频控件类
 {
     Q_OBJECT
 public:
@@ -73,7 +73,7 @@ private:
     QTimer*         timer;
 
     HMedia          media;
-    HVideoPlayer*   pImpl_player;
+    HVideoPlayer*   pImpl_player;//播放器负责读取文件和解码
     // for retry when SIGNAL_END_OF_FILE
     int             retry_interval;
     int             retry_maxcnt;

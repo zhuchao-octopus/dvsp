@@ -21,7 +21,7 @@ static void list_devices() {
 #else
     const char drive[] = "avfoundation";
 #endif
-    AVInputFormat* ifmt = av_find_input_format(drive);
+   const AVInputFormat *ifmt = av_find_input_format(drive);
     if (ifmt) {
         avformat_open_input(&fmt_ctx, "video=dummy", ifmt, &options);
     }
@@ -73,7 +73,7 @@ HFFPlayer::~HFFPlayer() {
 int HFFPlayer::open() {
     std::string ifile;
 
-    AVInputFormat* ifmt = NULL;
+    const AVInputFormat* ifmt = NULL;
     switch (media.type) {
     case MEDIA_TYPE_CAPTURE:
     {
@@ -161,7 +161,7 @@ int HFFPlayer::open() {
     AVCodecParameters* codec_param = video_stream->codecpar;
     hlogi("codec_id=%d:%s", codec_param->codec_id, avcodec_get_name(codec_param->codec_id));
 
-    AVCodec* codec = NULL;
+    const AVCodec* codec = NULL;
     if (decode_mode != SOFTWARE_DECODE) {
 try_hardware_decode:
         std::string decoder(avcodec_get_name(codec_param->codec_id));
